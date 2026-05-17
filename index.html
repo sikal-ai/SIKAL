@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIKAL AI - Kling Video</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white font-sans min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-slate-800 p-6 rounded-2xl shadow-xl space-y-4 border border-slate-700">
+        <h1 class="text-3xl font-extrabold text-cyan-400 tracking-wide text-center">SIKAL AI</h1>
+        <p class="text-xs text-center text-slate-400 uppercase tracking-widest">Kling AI Video App</p>
+        
+        <div class="space-y-1">
+            <label class="text-xs font-semibold text-slate-400">🔑 API KEY FREEPIK</label>
+            <input id="key" type="password" placeholder="Masukkan FPSK..." class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-cyan-500 outline-none">
+        </div>
+
+        <div class="space-y-1">
+            <label class="text-xs font-semibold text-slate-400">📝 PROMPT GERAKAN</label>
+            <textarea id="prompt" placeholder="Contoh: Orang berjalan melambaikan tangan lambat..." class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-sm h-24 resize-none focus:ring-2 focus:ring-cyan-500 outline-none"></textarea>
+        </div>
+
+        <button onclick="run()" id="btn" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 p-3.5 rounded-xl font-bold uppercase tracking-wider text-sm shadow-lg active:scale-95 transition-all">GENERATE VIDEO</button>
+        
+        <div id="status" class="text-center text-sm font-medium text-cyan-400 hidden">Memproses ke server...</div>
+    </div>
+
+    <script>
+        async function run() {
+            const btn = document.getElementById('btn');
+            const status = document.getElementById('status');
+            const key = document.getElementById('key').value.trim();
+            const prompt = document.getElementById('prompt').value.trim();
+
+            if (!key || !prompt) return alert("Isi API Key dan Prompt dulu cuy!");
+
+            btn.disabled = true;
+            status.classList.remove('hidden');
+            status.innerText = "🚀 Mengirim request lewat Proxy Vercel...";
+
+            try {
+                const res = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ apiKey: key, prompt: prompt })
+                });
+                
+                const data = await res.json();
+                status.innerText = "Hasil API: " + JSON.stringify(data);
+            } catch (err) {
+                status.innerText = "Error: " + err.message;
+            } finally {
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
