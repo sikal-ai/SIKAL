@@ -177,7 +177,6 @@
             reader.readAsDataURL(file);
         }
 
-        // FUNGSI TRANSLATE OTOMATIS KE BAHASA INGGRIS VIA GOOGLE API COUNTER
         async function translateKeInggris(text) {
             try {
                 const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=id&tl=en&dt=t&q=${encodeURIComponent(text)}`;
@@ -185,7 +184,7 @@
                 const result = await response.json();
                 return result[0][0][0]; 
             } catch (err) {
-                return text; // kalau gagal kembali ke teks awal biar aman
+                return text;
             }
         }
 
@@ -200,21 +199,20 @@
 
             btn.disabled = true;
             status.classList.remove('hidden');
-            status.innerText = "🌐 [TRANSLATOR]: Menerjemahkan prompt lu ke Bahasa Inggris...";
+            status.innerText = "🌐 [TRANSLATOR]: Menerjemahkan prompt lu...";
 
-            // Eksekusi Translating
             const promptInggris = await translateKeInggris(promptAsli);
-            status.innerText = `✨ [PROMPT TRANSLATED]: "${promptInggris}"\n⏳ [SYSTEM]: Mengirim request via model ${modelDipilih} ke Proxy Vercel...`;
+            status.innerText = `✨ [PROMPT]: "${promptInggris}"\n⏳ [SYSTEM]: Mengirim request langsung ke /generate.js...`;
 
             try {
-                const res = await fetch('/api/generate', {
+                const res = await fetch('/generate.js', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         apiKey: globalApiKey, 
-                        prompt: promptInggris, // Prompt dikirim dalam bahasa inggris resmi
+                        prompt: promptInggris, 
                         image: base64Image,
-                        model: modelDipilih // Mengirim info model yang dipilih user
+                        model: modelDipilih 
                     })
                 });
 
@@ -224,7 +222,7 @@
                     status.innerText = "🚀 [RESPON BERHASIL]: \n" + JSON.stringify(data, null, 2);
                 } else {
                     const textError = await res.text();
-                    status.innerText = "❌ [ERROR SERVER VERCEL]: Gagal memproses, kemungkinan API Key Freepik lu salah / limit habis. \n\nRespon Server: " + textError.substring(0, 200);
+                    status.innerText = "❌ [RESPON SERVER VERCEL]: Gagal konek, pastikan API Key lu bener. \n\nRespon: " + textError.substring(0, 200);
                 }
             } catch (err) {
                 status.innerText = "❌ [ERROR SYSTEM]: " + err.message;
