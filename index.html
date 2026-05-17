@@ -2,83 +2,81 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SIKAL GENERATOR VIDIO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Efek Tempered Glass murni pake CSS custom */
         .tempered-glass {
-            background: rgba(15, 23, 42, 0.45);
-            backdrop-filter: blur(16px) saturate(120%);
-            -webkit-backdrop-filter: blur(16px) saturate(120%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px) saturate(140%);
+            -webkit-backdrop-filter: blur(20px) saturate(140%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.6);
         }
         .bg-gradient-custom {
-            background: radial-gradient(circle at top right, rgba(6, 182, 212, 0.15), transparent 40%),
-                        radial-gradient(circle at bottom left, rgba(29, 78, 216, 0.15), transparent 40%),
+            background: radial-gradient(circle at top right, rgba(6, 182, 212, 0.18), transparent 50%),
+                        radial-gradient(circle at bottom left, rgba(29, 78, 216, 0.18), transparent 50%),
                         #020617;
         }
     </style>
 </head>
-<body class="bg-gradient-custom text-slate-100 font-sans min-h-screen flex items-center justify-center p-4 overflow-x-hidden">
+<body class="bg-gradient-custom text-slate-100 font-sans min-h-screen flex items-center justify-center p-4">
 
-    <div id="layarLogin" class="w-full max-w-sm tempered-glass p-8 rounded-2xl space-y-6 transition-all duration-500 scale-100 opacity-100">
+    <div id="layarLogin" class="w-full max-w-md tempered-glass p-8 rounded-2xl space-y-6 transition-all duration-500 scale-100 opacity-100">
         <div class="space-y-2 text-center">
-            <h1 class="text-3xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent tracking-wider">SIKAL AI</h1>
+            <h1 class="text-4xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent tracking-wider">SIKAL AI</h1>
             <p class="text-xs text-slate-400 uppercase tracking-widest">Masukkan Kunci Akses Lu Cok</p>
         </div>
 
         <div class="space-y-4">
             <div class="space-y-1">
                 <label class="text-[11px] font-bold text-cyan-400/80 uppercase tracking-wider">🔑 API KEY FREEPIK</label>
-                <input id="keyInput" type="password" placeholder="Masukkan FPSK..." class="w-full p-3.5 bg-slate-950/60 border border-slate-800 rounded-xl focus:outline-none focus:border-cyan-500 text-center text-sm transition font-mono tracking-widest text-cyan-300">
+                <input id="keyInput" type="password" placeholder="Masukkan FPSK..." class="w-full p-4 bg-slate-950/60 border border-slate-800 rounded-xl focus:outline-none focus:border-cyan-500 text-center text-sm transition font-mono tracking-widest text-cyan-300">
             </div>
 
-            <button onclick="masukBeranda()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 p-3.5 rounded-xl font-extrabold tracking-wide hover:opacity-90 active:scale-95 transition shadow-lg shadow-cyan-500/10 text-sm uppercase">
+            <button onclick="masukBeranda()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 p-4 rounded-xl font-extrabold tracking-wide hover:opacity-90 active:scale-95 transition shadow-lg text-sm uppercase">
                 Masuk ke Beranda
             </button>
         </div>
     </div>
 
-
-    <div id="layarBeranda" class="w-full max-w-xl tempered-glass p-8 rounded-3xl space-y-6 hidden opacity-0 transition-all duration-500 scale-95">
+    <div id="layarBeranda" class="w-full max-w-2xl tempered-glass p-6 sm:p-8 rounded-3xl space-y-6 hidden opacity-0 transition-all duration-500 scale-95 my-auto">
         
         <div class="flex flex-col sm:flex-row justify-between items-center border-b border-slate-800/60 pb-4 gap-3">
-            <div>
-                <h1 class="text-2xl font-black bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent tracking-wide text-center sm:text-left">SIKAL GENERATOR VIDIO</h1>
-                <p class="text-[10px] text-slate-400 uppercase tracking-widest text-center sm:text-left">Premium Image-To-Video Workspace</p>
+            <div class="text-center sm:text-left">
+                <h1 class="text-2xl sm:text-3xl font-black bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent tracking-wide">SIKAL GENERATOR VIDIO</h1>
+                <p class="text-[10px] text-slate-400 uppercase tracking-widest mt-0.5">Premium Image-To-Video Workspace</p>
             </div>
-            <button onclick="keluarKeLogin()" class="text-[11px] bg-slate-950/50 hover:bg-red-950/30 border border-slate-800 hover:border-red-900/50 px-3 py-1.5 rounded-lg text-slate-400 hover:text-red-400 transition">
+            <button onclick="keluarKeLogin()" class="text-xs bg-slate-950/70 hover:bg-red-950/40 border border-slate-800 hover:border-red-900/50 px-4 py-2 rounded-xl text-slate-400 hover:text-red-400 transition font-medium">
                 🚪 Keluar
             </button>
         </div>
 
-        <div class="grid grid-cols-1 gap-5">
+        <div class="space-y-5">
             <div class="space-y-1.5">
                 <label class="text-xs font-bold text-slate-400 tracking-wide uppercase flex items-center gap-1">📸 Foto Utama <span class="text-[10px] text-cyan-400/70">(Locked Subject)</span></label>
-                <div class="relative w-full p-6 bg-slate-950/40 border-2 border-dashed border-slate-800 hover:border-cyan-500/50 rounded-2xl transition flex flex-col items-center justify-center cursor-pointer min-h-[130px]">
-                    <input id="fotoInput" type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="previewImage(this)">
+                <div class="relative w-full p-6 bg-slate-950/50 border-2 border-dashed border-slate-800 hover:border-cyan-500/50 rounded-2xl transition flex flex-col items-center justify-center cursor-pointer min-h-[140px]">
+                    <input id="fotoInput" type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="prosesDanKompresImage(this)">
                     <div id="uploadPlaceholder" class="text-center space-y-2">
-                        <div class="text-2xl text-cyan-400">📁</div>
-                        <p class="text-sm text-slate-300 font-medium">Pilih atau Seret Foto Target Ke Sini</p>
-                        <p class="text-[10px] text-slate-500">Mendukung format JPG, PNG up to 5MB</p>
+                        <div class="text-3xl text-cyan-400">📁</div>
+                        <p class="text-sm text-slate-200 font-medium">Pilih / Upload Foto Target</p>
+                        <p class="text-[10px] text-slate-500">Foto otomatis dikompres aman agar tidak error</p>
                     </div>
-                    <img id="imagePreview" class="hidden max-h-40 rounded-xl object-cover border border-slate-700 shadow-md">
+                    <img id="imagePreview" class="hidden max-h-64 w-auto rounded-xl object-cover border border-slate-700 shadow-xl">
                 </div>
             </div>
 
             <div class="space-y-1.5">
                 <label class="text-xs font-bold text-slate-400 tracking-wide uppercase">📝 Kendali Prompt Gerakan</label>
-                <textarea id="prompt" rows="3" placeholder="Contoh: Kamera 0.5x lensa lebar, subjek pria berjalan candid menyusuri warung pecel ayam di malam hari, ultra-detail skin..." class="w-full p-3.5 bg-slate-950/50 border border-slate-800 rounded-xl focus:outline-none focus:border-cyan-500 text-sm placeholder-slate-600 text-slate-200 resize-none"></textarea>
+                <textarea id="prompt" rows="4" placeholder="Contoh: Maju ke depan sambil berpose ke kamera, mereka sedang naik motor, tack sharp, no blur..." class="w-full p-4 bg-slate-950/60 border border-slate-800 rounded-xl focus:outline-none focus:border-cyan-500 text-sm placeholder-slate-600 text-slate-100 resize-none"></textarea>
             </div>
         </div>
 
-        <button onclick="run()" id="btn" class="w-full bg-gradient-to-r from-cyan-500 via-blue-600 to-blue-700 p-4 rounded-xl font-black tracking-wider hover:opacity-95 active:scale-[0.98] transition shadow-xl shadow-cyan-500/10 text-sm uppercase">
+        <button onclick="run()" id="btn" class="w-full bg-gradient-to-r from-cyan-500 via-blue-600 to-blue-700 p-4 rounded-xl font-black tracking-wider hover:opacity-95 active:scale-[0.98] transition shadow-xl text-sm uppercase">
             🎬 MULAI GENERATE VIDEO
         </button>
 
-        <div id="status" class="text-left text-xs font-mono text-cyan-400 hidden whitespace-pre-wrap bg-slate-950/80 p-4 rounded-xl border border-slate-800/80 max-h-48 overflow-y-auto custom-scrollbar">Memproses antrean permintaan ke proxy...</div>
+        <div id="status" class="text-left text-xs font-mono text-cyan-400 hidden whitespace-pre-wrap bg-slate-950/90 p-4 rounded-xl border border-slate-800 max-h-48 overflow-y-auto"></div>
     </div>
 
     <script>
@@ -88,7 +86,6 @@
         function masukBeranda() {
             const key = document.getElementById('keyInput').value.trim();
             if (!key) return alert("ApiKey-nya diisi dulu dong, cok!");
-            
             globalApiKey = key;
             
             const layarLogin = document.getElementById('layarLogin');
@@ -98,7 +95,6 @@
             setTimeout(() => {
                 layarLogin.classList.add('hidden');
                 layarBeranda.classList.remove('hidden');
-                
                 setTimeout(() => {
                     layarBeranda.classList.remove('scale-95', 'opacity-0');
                     layarBeranda.classList.add('scale-100', 'opacity-100');
@@ -106,6 +102,111 @@
             }, 300);
         }
 
+        function keluarKeLogin() {
+            const layarLogin = document.getElementById('layarLogin');
+            const layarBeranda = document.getElementById('layarBeranda');
+
+            layarBeranda.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                layarBeranda.classList.add('hidden');
+                layarLogin.classList.remove('hidden');
+                setTimeout(() => {
+                    layarLogin.classList.remove('scale-95', 'opacity-0');
+                    layarLogin.classList.add('scale-100', 'opacity-100');
+                }, 50);
+            }, 300);
+        }
+
+        // FUNGSI SAKTI: Kompres foto otomatis biar sizenya di bawah 1MB sebelum dikirim!
+        function prosesDanKompresImage(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    // Batasi resolusi maksimal 1024px agar file sizenya ringan & proses AI Kling makin cepet
+                    const MAX_WIDTH = 1024;
+                    const MAX_HEIGHT = 1024;
+
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2document.getContext' in canvas ? '2d' : '2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Kompres kualitas gambar jadi 75%
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.75);
+                    
+                    document.getElementById('uploadPlaceholder').classList.add('hidden');
+                    const imgPreview = document.getElementById('imagePreview');
+                    imgPreview.src = compressedBase64;
+                    imgPreview.classList.remove('hidden');
+                    
+                    base64Image = compressedBase64.split(',')[1];
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function run() {
+            const btn = document.getElementById('btn');
+            const status = document.getElementById('status');
+            const prompt = document.getElementById('prompt').value.trim();
+
+            if (!prompt) return alert("Prompt gerakan videonya diisi dulu cok!");
+            if (!base64Image) return alert("Upload fotonya dulu biar mukanya kekunci!");
+
+            btn.disabled = true;
+            status.classList.remove('hidden');
+            status.innerText = "⏳ [SYSTEM]: Mengirim request aman (Foto terkompresi) ke Proxy Vercel...";
+
+            try {
+                const res = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        apiKey: globalApiKey, 
+                        prompt: prompt,
+                        image: base64Image 
+                    })
+                });
+
+                // Cek apakah server ngasih respon eror HTML atau bukan
+                const contentType = res.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    const data = await res.json();
+                    status.innerText = "🚀 [RESPON BERHASIL]: \n" + JSON.stringify(data, null, 2);
+                } else {
+                    const textError = await res.text();
+                    status.innerText = "❌ [ERROR SERVER VERCEL]: Terjadi kendala di backend, kemungkinan API Key Freepik lu salah / limit habis. \n\nRespon Server: " + textError.substring(0, 200);
+                }
+            } catch (err) {
+                status.innerText = "❌ [ERROR SYSTEM]: " + err.message;
+            } finally {
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
         function keluarKeLogin() {
             const layarLogin = document.getElementById('layarLogin');
             const layarBeranda = document.getElementById('layarBeranda');
