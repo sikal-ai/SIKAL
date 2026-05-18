@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIKAL-Ai</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+  body { background: #0f0f0f; color: #fff; padding: 20px; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+.container { max-width: 600px; width: 100%; }
+  h1 { text-align: center; margin-bottom: 30px; color: #7c3aed; font-size: 32px; }
+.card { background: #1a1a1a; padding: 35px 30px; border-radius: 16px; border: 1px solid #2a2a2a; box-shadow: 0 8px 30px rgba(124, 58, 237, 0.15); }
+  input, select, button { width: 100%; padding: 14px; margin-top: 12px; border-radius: 8px; border: 1px solid #333; background: #2a2a2a; color: #fff; font-size: 15px; outline: none; }
+  input:focus, select:focus { border-color: #7c3aed; }
+  button { background: #7c3aed; border: none; cursor: pointer; font-weight: bold; transition: 0.2s; margin-top: 20px; }
+  button:hover { background: #6d28d9; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  #result img, #result video { width: 100%; border-radius: 8px; margin-top: 15px; }
+.hidden { display: none; }
+.note { font-size: 12px; opacity: 0.6; margin-top: 15px; text-align: center; }
+  label { font-size: 13px; opacity: 0.8; margin-top: 18px; display: block; }
+.header-sub { text-align: center; opacity: 0.7; margin-bottom: 25px; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div id="api-key-section">
+    <h1>SIKAL-Ai</h1>
+    <p class="header-sub">AI Tools all in one</p>
+    <div class="card">
+      <h3 style="text-align:center; margin-bottom:5px;">🔑 Masukkan API Key Freepik</h3>
+      <p class="note" style="margin-bottom:15px;">Key disimpan lokal di browser kamu</p>
+      <input type="password" id="freepik-api-key" placeholder="FPSXxxxxxxxxxx" autofocus>
+      <button onclick="saveApiKey()">Masuk ke Dashboard</button>
+      <p class="note">Belum punya key? <a href="https://www.freepik.com/profile/api" target="_blank" style="color:#7c3aed;">Daftar gratis disini</a></p>
+    </div>
+  </div>
+
+  <div id="tool-section" class="hidden">
+    <h1>SIKAL-Ai</h1>
+    <div class="card">
+      <h3>⚡ Pilih Tool</h3>
+      <select id="tool-select">
+        <option value="kling-video">Kling Video - Image to Video</option>
+        <option value="luma-video">Luma Dream Machine - Image to Video</option>
+        <option value="magnific-upscale">Magnific Upscaler 2x</option>
+        <option value="magnific-relight">Magnific Relight</option>
+      </select>
+
+      <label>Upload Gambar:</label>
+      <input type="file" id="image-upload" accept="image/*">
+
+      <label>Prompt:</label>
+      <input type="text" id="prompt" placeholder="Contoh: make it move, cinematic lighting">
+
+      <button id="generate-btn" onclick="generate()">Generate</button>
+      <div id="result"></div>
+      <button onclick="logout()" style="background:#333; margin-top:25px; font-size:13px;">Ganti API Key</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let apiKey = localStorage.getItem('freepik_api_key');
+
+window.onload = () => {
+  if (apiKey) showTools();
+}
+
+function saveApiKey() {
+  apiKey = document.getElementById('freepik-api-key').value.trim();
+  if (!apiKey.startsWith('FPSX')) {
+    alert('API key Freepik harus diawali FPSX');
+    return;
+  }
+  localStorage.setItem('freepik_api_key', apiKey);
+  showTools();
+}
+
+function showTools() {
+  document.getElementById('api-key-section').classList.add('hidden');
+  document.getElementById('tool-section').classList.remove('hidden');
+}
+
+function logout() {
+  localStorage.removeItem('freepik_api_key');
+  location.reload();
+}
+
+async function generate() {
+  const btn = document.getElementById('generate-btn');
+  const tool = document.getElementById('tool-select').value;
+  const prompt = document.getElementById('prompt').value;
+  const file = document.getElementById('image-upload').files[0];
+  const resultDiv = document.getElementById('result');
+
+  if (!file) return alert('Upload gambar dulu');
+
+  btn.disabled = true;
+  btn.textContent = 'Processing...';
+  resultDiv.innerHTML = 'Loading... tunggu 10-30 detik';
+
+  try {
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tool, prompt, image: await fileToBase64(file), apiKey })
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'API error: ' + res.status);
+    }
+
+    const data = await res.json();
+    const mediaUrl = data.data[0].url;
+    resultDiv.innerHTML = mediaUrl.includes('.mp4')
+     ? `<video src="${mediaUrl}" controls autoplay loop></video>`
+      : `<img src="${mediaUrl}" alt="result">`;
+
+  } catch (err) {
+    resultDiv.innerHTML = 'Error: ' + err.message;
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Generate';
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+</script>
+</body>
+</html>
