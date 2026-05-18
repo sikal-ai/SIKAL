@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIKAL-Ai</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: #0c0c14;
+  color: #fff;
+  min-height: 100vh;
+}
+
+/* Landing Page */
+#landing {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 60px 20px;
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.logo-icon {
+  width: 55px;
+  height: 55px;
+  background: linear-gradient(135deg, #6a5acd, #836fff);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 26px;
+  color: white;
+}
+
+.logo h3 {
+  font-size: 26px;
+  background: linear-gradient(90deg, #6a5acd, #00d4ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#landing h1 {
+  font-size: 32px;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #888;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: #161622;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  text-align: left;
+  border: 1px solid #262636;
+}
+
+.card-header {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 16px;
+}
+
+.step {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #6a5acd, #836fff);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.step.orange {
+  background: linear-gradient(135deg, #ff8c42, #ff6b35);
+}
+
+.card h4 {
+  color: #fff;
+  margin-bottom: 4px;
+  font-size: 16px;
+}
+
+.card p {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 14px;
+  background: #1e1e2e;
+  border: 1px solid #2e2e42;
+  border-radius: 12px;
+  color: #8b7cff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
+}
+
+.input-group input {
+  flex: 1;
+  padding: 14px;
+  border: 1px solid #2e2e42;
+  border-radius: 12px;
+  background: #0f0f1a;
+  color: #fff;
+  outline: none;
+}
+
+.btn-primary {
+  padding: 14px 26px;
+  background: linear-gradient(135deg, #6a5acd, #836fff);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.info-box {
+  background: #161622;
+  border: 1px solid #262636;
+  border-radius: 12px;
+  padding: 18px 20px;
+  text-align: left;
+  margin-top: 25px;
+}
+
+.info-box p {
+  color: #8b7cff;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.info-box ul {
+  margin-left: 20px;
+  color: #bbb;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* App/Home */
+#app {
+  display: none;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-bottom: 100px;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-top: 10px;
+}
+
+.app-header h2 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.logout {
+  color: #ff6b6b;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Model Selector */
+.model-scroll {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+  scrollbar-width: none;
+}
+
+.model-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.model-item {
+  text-align: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.model-icon {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: #1e1e2e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  border: 2px solid transparent;
+  position: relative;
+  font-size: 28px;
+}
+
+.model-item.active.model-icon {
+  border-color: #8b7cff;
+  box-shadow: 0 0 15px rgba(139, 124, 255, 0.5);
+}
+
+.model-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #8b7cff;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+.model-badge.hot {
+  background: #ff4757;
+}
+
+.model-name {
+  font-size: 12px;
+  color: #888;
+  max-width: 70px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.model-item.active.model-name {
+  color: #8b7cff;
+}
+
+/* Cards */
+.section-card {
+  background: #161622;
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 15px;
+  border: 1px solid #262636;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  font-size: 15px;
+}
+
+.section-subtitle {
+  color: #888;
+  font-size: 13px;
+  font-weight: normal;
+}
+
+/* Upload Area */
+.upload-area {
+  border: 2px dashed #2e2e42;
+  border-radius: 12px;
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.upload-area:hover {
+  border-color: #8b7cff;
+  background: rgba(139, 124, 255, 0.05);
+}
+
+.upload-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.upload-text {
+  color: #888;
+  font-size: 14px;
+}
+
+.upload-text small {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+}
+
+.upload-preview img {
+  max-width: 100%;
+  border-radius: 12px;
+  display: none;
+}
+
+/* Form */
+textarea, select {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #2e2e42;
+  background: #0f0f1a;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  resize: vertical;
+}
+
+textarea {
+  min-height: 100px;
+}
+
+.char-count {
+  text-align: right;
+  font-size: 12px;
+  color: #666;
+  margin-top: 5px;
+}
+
+label {
+  display: block;
+  color: #aaa;
+  font-size: 14px;
+  margin-bottom: 8px;
+  margin-top: 15px;
+}
+
+/* Generate Button */
+.generate-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 16px;
+  background: linear-gradient(135deg, #6a5acd, #836fff);
+  border: none;
+  border-radius: 14px;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 8px 25px rgba(106, 90, 205, 0.4);
+}
+
+.generate-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.task-info {
+  text-align: center;
+  color: #666;
+  font-size: 13px;
+  margin-top: 15px;
+}
+
+.loader {
+  display: none;
+  margin: 20px auto;
+  border: 3px solid #2e2e42;
+  border-top: 3px solid #8b7cff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+ 0% { transform: rotate(0deg); }
+ 100% { transform: rotate(360deg); }
+}
+
+.result-video {
+  margin-top: 15px;
+  border-radius: 12px;
+  overflow: hidden;
+  display: none;
+}
+</style>
+</head>
+<body>
+
+<!-- Landing Page -->
+<div id="landing">
+  <div class="logo">
+    <div class="logo-icon">S</div>
+    <h3>SIKAL-Ai</h3>
+  </div>
+
+  <h1>Selamat Datang di SIKAL-Ai</h1>
+  <p class="subtitle">AI Video Generator dengan Freepik API</p>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="step">1</div>
+      <div>
+        <h4>Daftar Akun Freepik (Gratis)</h4>
+        <p>Dapatkan $5 kredit gratis</p>
+      </div>
+    </div>
+    <button class="btn-secondary" onclick="window.open('https://www.freepik.com/ai/api','_blank')">
+      📝 Buka Halaman Daftar →
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="step orange">2</div>
+      <div>
+        <h4>Paste API Key</h4>
+        <p>Disimpan lokal di perangkat ini</p>
+      </div>
+    </div>
+    <div class="input-group">
+      <input type="password" id="apiKeyInput" placeholder="fpk-xxxxxxxxxxxxxxxx">
+      <button class="btn-primary" onclick="enterApp()">Simpan</button>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <p>💡 Info:</p>
+    <ul>
+      <li>Pendaftaran & API key 100% gratis — dapat $5 kredit</li>
+      <li>API key disimpan hanya di perangkat ini</li>
+      <li>Setiap generate menggunakan kredit dari akun Freepik</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Main App -->
+<div id="app">
+  <div class="app-header">
+    <h2>Image to Video</h2>
+    <button class="logout" onclick="logout()">Ganti Key</button>
+  </div>
+
+  <!-- Model Selector -->
+  <div class="model-scroll" id="modelScroll">
+    <div class="model-item active" data-model="kling">
+      <div class="model-icon">🎬<span class="model-badge hot">HOT</span></div>
+      <div class="model-name">Kling 2.6 Pro</div>
+    </div>
+    <div class="model-item" data-model="kling-turbo">
+      <div class="model-icon">🎬<span class="model-badge">V3</span></div>
+      <div class="model-name">Kling V3 Pro</div>
+    </div>
+    <div class="model-item" data-model="kling-pro">
+      <div class="model-icon">🎬<span class="model-badge">V3</span></div>
+      <div class="model-name">Kling V3 Std</div>
+    </div>
+    <div class="model-item" data-model="kling">
+      <div class="model-icon">🧠<span class="model-badge">V3</span></div>
+      <div class="model-name">Kling V3 Omni</div>
+    </div>
+  </div>
+
+  <!-- Model Info -->
+  <div class="section-card">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="font-size: 24px;">🎬</span>
+      <div>
+        <div style="font-weight: 600;" id="modelName">Kling 2.6 Pro</div>
+        <div class="section-subtitle">Image-to-Video terbaru dari Kling</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload -->
+  <div class="section-card">
+    <div class="section-title">📷 Upload Gambar</div>
+    <div class="upload-area" id="uploadArea">
+      <input type="file" id="image" accept="image/*" style="display: none;">
+      <div id="uploadContent">
+        <div class="upload-icon">📸</div>
+        <div class="upload-text">
+          Klik atau drag file
+          <small>JPG, PNG, WEBP — Max 10MB</small>
+        </div>
+      </div>
+      <div class="upload-preview">
+        <img id="previewImg">
+      </div>
+    </div>
+  </div>
+
+  <!-- Prompt -->
+  <div class="section-card">
+    <div class="section-title">💬 Prompt</div>
+    <textarea id="prompt" placeholder="Deskripsikan yang diinginkan..." maxlength="2500"></textarea>
+    <div class="char-count"><span id="charCount">0</span>/2500</div>
+  </div>
+
+  <!-- Settings -->
+  <div class="section-card">
+    <div class="section-title">⚙️ Settings</div>
+    <label>Durasi</label>
+    <select id="duration">
+      <option value="5">5 detik</option>
+      <option value="8">8 detik</option>
+      <option value="10">10 detik</option>
+    </select>
+
+    <label>Aspect Ratio</label>
+    <select id="aspectRatio">
+      <option value="16:9">16:9</option>
+      <option value="9:16">9:16</option>
+      <option value="1:1">1:1</option>
+    </select>
+  </div>
+
+  <div class="task-info">Task: 0/10 — Req: 0/20/min</div>
+
+  <div class="loader" id="loader"></div>
+  <div class="result-video" id="resultVideo"></div>
+
+  <button class="generate-btn" id="generate">
+    🚀 Generate Video
+  </button>
+</div>
+
+<script>
+let apiKey = localStorage.getItem('freepik_key');
+let selectedModel = 'kling';
+
+if (apiKey) {
+  showApp();
+}
+
+function enterApp() {
+  const key = document.getElementById('apiKeyInput').value;
+  if (!key) {
+    alert('Isi API key dulu');
+    return;
+  }
+  localStorage.setItem('freepik_key', key);
+  apiKey = key;
+  showApp();
+}
+
+function showApp() {
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+}
+
+function logout() {
+  localStorage.removeItem('freepik_key');
+  location.reload();
+}
+
+// Model Selector
+document.querySelectorAll('.model-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.model-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    selectedModel = item.dataset.model;
+    document.getElementById('modelName').textContent = item.querySelector('.model-name').textContent;
+  });
+});
+
+// Upload
+const uploadArea = document.getElementById('uploadArea');
+const imageInput = document.getElementById('image');
+const previewImg = document.getElementById('previewImg');
+const uploadContent = document.getElementById('uploadContent');
+
+uploadArea.addEventListener('click', () => imageInput.click());
+
+imageInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      previewImg.src = e.target.result;
+      previewImg.style.display = 'block';
+      uploadContent.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+// Char Counter
+document.getElementById('prompt').addEventListener('input', (e) => {
+  document.getElementById('charCount').textContent = e.target.value.length;
+});
+
+// Generate
+document.getElementById('generate').addEventListener('click', async () => {
+  const prompt = document.getElementById('prompt').value;
+  const file = imageInput.files[0];
+  const btn = document.getElementById('generate');
+  const loader = document.getElementById('loader');
+  const resultVideo = document.getElementById('resultVideo');
+
+  if (!file ||!prompt) {
+    alert('Upload gambar dan isi prompt dulu');
+    return;
+  }
+
+  btn.disabled = true;
+  loader.style.display = 'block';
+  resultVideo.style.display = 'none';
+
+  const reader = new FileReader();
+  reader.onloadend = async () => {
+    const base64 = reader.result;
+
+    try {
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tool: selectedModel,
+          prompt,
+          image: base64,
+          apiKey
+        })
+      });
+
+      const data = await res.json();
+
+      if (data.error) {
+        alert('Error: ' + data.error);
+      } else {
+        resultVideo.innerHTML = `<video src="${data.video_url}" controls autoplay loop style="width:100%"></video>`;
+        resultVideo.style.display = 'block';
+        window.scrollTo(0, document.body.scrollHeight);
+      }
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
+
+    btn.disabled = false;
+    loader.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+});
+</script>
+</body>
+      </html>
