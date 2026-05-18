@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIKAL-Ai</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #0f0f1a, #1a1a2e);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Landing Page */
+#landing {
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+#landing h1 {
+  font-size: 42px;
+  margin-bottom: 10px;
+  background: linear-gradient(90deg, #6a5acd, #00d4ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#landing p {
+  color: #aaa;
+  margin-bottom: 30px;
+}
+
+#landing input {
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(35, 35, 50, 0.6);
+  color: #fff;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+#landing button {
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(90deg, #6a5acd, #836fff);
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#landing button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(106, 90, 205, 0.4);
+}
+
+/* Main App */
+#app {
+  display: none;
+  width: 100%;
+  max-width: 650px;
+  background: rgba(25, 25, 40, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.header h2 {
+  font-size: 24px;
+  background: linear-gradient(90deg, #6a5acd, #00d4ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.logout {
+  color: #ff6b6b;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+label {
+  display: block;
+  margin: 15px 0 8px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+input, select, textarea, button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(35, 35, 50, 0.6);
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+#generate {
+  background: linear-gradient(90deg, #6a5acd, #836fff);
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: 0.2s;
+}
+
+#generate:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(106, 90, 205, 0.4);
+}
+
+#generate:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.preview {
+  margin-top: 15px;
+  border-radius: 12px;
+  overflow: hidden;
+  display: none;
+}
+
+.preview img,.preview video {
+  width: 100%;
+  display: block;
+}
+
+.loader {
+  display: none;
+  margin: 20px auto;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top: 3px solid #6a5acd;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+ 0% { transform: rotate(0deg); }
+ 100% { transform: rotate(360deg); }
+}
+
+.file-input {
+  position: relative;
+}
+
+.file-input input {
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.file-label {
+  display: block;
+  padding: 14px;
+  text-align: center;
+  border: 1px dashed rgba(255,255,255,0.2);
+  border-radius: 12px;
+  color: #aaa;
+}
+</style>
+</head>
+<body>
+
+<!-- Landing Page -->
+<div id="landing">
+  <h1>SIKAL-Ai</h1>
+  <p>Masukin API Key Freepik lu buat mulai</p>
+  <input type="password" id="apiKeyInput" placeholder="freepik_xxxxxxxxxxxx">
+  <button onclick="enterApp()">Masuk</button>
+</div>
+
+<!-- Main App -->
+<div id="app">
+  <div class="header">
+    <h2>Generate Video</h2>
+    <button class="logout" onclick="logout()">Ganti API Key</button>
+  </div>
+
+  <label>Pilih Tool</label>
+  <select id="tool">
+    <option value="kling">Kling 2.1 - Image to Video</option>
+    <option value="kling-turbo">Kling 2.5 Turbo - Faster</option>
+    <option value="kling-pro">Kling 2.1 Pro - Higher Quality</option>
+  </select>
+
+  <label>Upload Gambar</label>
+  <div class="file-input">
+    <input type="file" id="image" accept="image/*">
+    <div class="file-label" id="fileLabel">Klik untuk pilih gambar</div>
+  </div>
+  <div class="preview" id="preview">
+    <img id="previewImg">
+  </div>
+
+  <label>Prompt</label>
+  <textarea id="prompt" placeholder="Contoh: kamera zoom in, angin bertiup, air mengalir"></textarea>
+
+  <button id="generate">Generate Video</button>
+
+  <div class="loader" id="loader"></div>
+  <div class="preview" id="output"></div>
+</div>
+
+<script>
+let apiKey = localStorage.getItem('freepik_key');
+
+if (apiKey) {
+  showApp();
+}
+
+function enterApp() {
+  const key = document.getElementById('apiKeyInput').value;
+  if (!key) {
+    alert('Isi API key dulu anjing');
+    return;
+  }
+  localStorage.setItem('freepik_key', key);
+  apiKey = key;
+  showApp();
+}
+
+function showApp() {
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+}
+
+function logout() {
+  localStorage.removeItem('freepik_key');
+  location.reload();
+}
+
+document.getElementById('image').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    document.getElementById('fileLabel').textContent = file.name;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      document.getElementById('previewImg').src = e.target.result;
+      document.getElementById('preview').style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+document.getElementById('generate').addEventListener('click', async () => {
+  const tool = document.getElementById('tool').value;
+  const prompt = document.getElementById('prompt').value;
+  const file = document.getElementById('image').files[0];
+  const output = document.getElementById('output');
+  const btn = document.getElementById('generate');
+  const loader = document.getElementById('loader');
+
+  if (!file ||!prompt) {
+    alert('Upload gambar dan isi prompt dulu');
+    return;
+  }
+
+  btn.disabled = true;
+  loader.style.display = 'block';
+  output.style.display = 'none';
+
+  const reader = new FileReader();
+  reader.onloadend = async () => {
+    const base64 = reader.result;
+
+    try {
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tool, prompt, image: base64, apiKey })
+      });
+
+      const data = await res.json();
+
+      if (data.error) {
+        alert('Error: ' + data.error);
+      } else {
+        output.innerHTML = `<video src="${data.video_url}" controls autoplay loop></video>`;
+        output.style.display = 'block';
+      }
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
+
+    btn.disabled = false;
+    loader.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+});
+</script>
+</body>
+</html>
