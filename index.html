@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Freepik AI Tools</title>
+<style>
+body { font-family: Arial, sans-serif; background: #111; color: #fff; padding: 20px; }
+.container { max-width: 600px; margin: auto; background: #1e1e1e; padding: 20px; border-radius: 12px; }
+input, select, button, textarea { width: 100%; margin: 10px 0; padding: 10px; border-radius: 8px; border: none; background: #2a2a2a; color: #fff; }
+button { background: #5865f2; cursor: pointer; }
+button:disabled { background: #444; cursor: not-allowed; }
+img, video { max-width: 100%; border-radius: 8px; margin-top: 10px; }
+label { font-size: 14px; color: #aaa; }
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Freepik AI Image to Video</h2>
+
+<label>API Key Freepik</label>
+<input type="password" id="apiKey" placeholder="Masukkan API Key lu">
+
+<label>Pilih Tool</label>
+<select id="tool">
+  <option value="kling">Kling 2.1 - Image to Video</option>
+  <option value="kling-turbo">Kling 2.5 Turbo - Faster</option>
+  <option value="kling-pro">Kling 2.1 Pro - Higher Quality</option>
+  <option value="luma">Luma Dream Machine</option>
+  <option value="runway">Runway Gen-3</option>
+  <option value="pika">Pika Labs</option>
+</select>
+
+<label>Upload Gambar</label>
+<input type="file" id="image" accept="image/*">
+
+<label>Prompt</label>
+<textarea id="prompt" placeholder="Deskripsikan gerakan video yang lu mau"></textarea>
+
+<button id="generate">Generate Video</button>
+
+<div id="output"></div>
+</div>
+
+<script>
+const apiKeyInput = document.getElementById('apiKey');
+const savedKey = localStorage.getItem('freepik_key');
+if (savedKey) apiKeyInput.value = savedKey;
+
+apiKeyInput.addEventListener('change', () => {
+  localStorage.setItem('freepik_key', apiKeyInput.value);
+});
+
+document.getElementById('generate').addEventListener('click', async () => {
+  const tool = document.getElementById('tool').value;
+  const prompt = document.getElementById('prompt').value;
+  const file = document.getElementById('image').files[0];
+  const apiKey = apiKeyInput.value;
+  const output = document.getElementById('output');
+  const btn = document.getElementById('generate');
+
+  if (!apiKey ||!file ||!prompt) {
+    alert('Isi API key, upload gambar, dan isi prompt dulu');
+    return;
+  }
+
+  btn.disabled = true;
+  output.innerHTML = 'Processing... ini bisa 30-90 detik';
+
+  const reader = new FileReader();
+  reader.onloadend = async () => {
+    const base64 = reader.result;
+
+    try {
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tool, prompt, image: base64, apiKey })
+      });
+
+      const data = await res.json();
+
+      if (data.error) {
+        output.innerHTML = 'Error: ' + data.error;
+      } else {
+        output.innerHTML = `<video src="${data.video_url}" controls autoplay loop></video>`;
+      }
+    } catch (err) {
+      output.innerHTML = 'Error: ' + err.message;
+    }
+
+    btn.disabled = false;
+  };
+  reader.readAsDataURL(file);
+});
+</script>
+</body>
+</html>
