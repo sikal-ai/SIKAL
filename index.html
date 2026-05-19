@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIKAL-Ai</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body { background: #0a0a0a; color: #fff; padding: 20px; }
+    .container { max-width: 700px; margin: 0 auto; }
+    h1 { text-align: center; margin-bottom: 30px; background: linear-gradient(90deg, #ff6b6b, #4ecdc4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    input, textarea, button { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 10px; border: 1px solid #333; background: #1a1a1a; color: #fff; font-size: 15px; }
+    textarea { min-height: 120px; resize: vertical; }
+    button { background: linear-gradient(90deg, #ff6b6b, #4ecdc4); border: none; font-weight: 600; cursor: pointer; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .note { font-size: 13px; color: #888; margin-bottom: 20px; text-align: center; }
+    .note a { color: #4ecdc4; }
+    video { width: 100%; border-radius: 12px; margin-top: 20px; }
+    .loader { text-align: center; color: #4ecdc4; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>SIKAL-Ai</h1>
+    
+    <input type="password" id="apiKey" placeholder="Paste API Key fal.ai kamu di sini" />
+    <p class="note">Dapetin key gratis di <a href="https://fal.ai" target="_blank">fal.ai</a> > API Keys</p>
+    
+    <textarea id="prompt" placeholder="Contoh: A cat dancing in space, cinematic, 4k"></textarea>
+    <button id="generateBtn">Generate Video</button>
+    
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const btn = document.getElementById('generateBtn');
+    const apiKeyInput = document.getElementById('apiKey');
+    const promptInput = document.getElementById('prompt');
+    const resultDiv = document.getElementById('result');
+
+    apiKeyInput.value = localStorage.getItem('falApiKey') || '';
+    apiKeyInput.addEventListener('input', () => {
+      localStorage.setItem('falApiKey', apiKeyInput.value);
+    });
+
+    btn.addEventListener('click', async () => {
+      const apiKey = apiKeyInput.value.trim();
+      const prompt = promptInput.value.trim();
+
+      if (!apiKey) return alert('Masukin API key dulu bang');
+      if (!prompt) return alert('Masukin prompt dulu');
+
+      btn.disabled = true;
+      resultDiv.innerHTML = '<div class="loader">Sedang generate... sabar ya</div>';
+
+      try {
+        const res = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt, apiKey })
+        });
+
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+        
+        pollStatus(data.request_id, apiKey);
+      } catch (err) {
+        resultDiv.innerHTML = `<p style="color:#ff6b6b">Error: ${err.message}</p>`;
+        btn.disabled = false;
+      }
+    });
+
+    async function pollStatus(requestId, apiKey) {
+      const interval = setInterval(async () => {
+        const res = await fetch('/api/status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ request_id: requestId, apiKey })
+        });
+        
+        const data = await res.json();
+        
+        if (data.status === 'COMPLETED') {
+          clearInterval(interval);
+          resultDiv.innerHTML = `<video src="${data.video.url}" controls autoplay loop></video>`;
+          btn.disabled = false;
+        } else if (data.status === 'FAILED') {
+          clearInterval(interval);
+          resultDiv.innerHTML = '<p style="color:#ff6b6b">Gagal generate</p>';
+          btn.disabled = false;
+        }
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
