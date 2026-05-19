@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIKAL-Ai</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body { background: #0a0e1a; color: #e2e8f0; min-height: 100vh; }
+
+  .header {
+      background: #0f172a;
+      padding: 14px 20px;
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #1e293b;
+    }
+  .header.show { display: flex; }
+  .logo-wrap { display: flex; align-items: center; gap: 10px; }
+  .logo-icon {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      border-radius: 8px;
+    }
+  .logo-text { font-size: 22px; font-weight: 700; color: #3b82f6; }
+  .header-right { display: flex; gap: 10px; align-items: center; }
+  .status-btn {
+      padding: 8px 16px;
+      background: #1e293b;
+      border: 1px solid #22c55e;
+      border-radius: 20px;
+      font-size: 13px;
+      color: #22c55e;
+      display: flex; align-items: center; gap: 6px;
+    }
+  .status-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; }
+  .logout-btn {
+      padding: 8px 16px;
+      background: #3b1e1e;
+      border: 1px solid #ef4444;
+      border-radius: 20px;
+      font-size: 13px;
+      color: #ef4444;
+      cursor: pointer;
+    }
+
+  .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+  .landing { text-align: center; }
+  .logo-center {
+      width: 80px; height: 80px;
+      background: #1e293b;
+      border-radius: 16px;
+      margin: 0 auto 24px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px; border: 1px solid #334155;
+    }
+    h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; color: #3b82f6; }
+  .subtitle { font-size: 15px; color: #94a3b8; margin-bottom: 32px; }
+
+  .card {
+      background: #1e293b;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      text-align: left;
+      border: 1px solid #334155;
+      border-left: 4px solid #3b82f6;
+    }
+  .card-header { display: flex; align-items: center; margin-bottom: 12px; }
+  .badge {
+      width: 32px; height: 32px;
+      background: #3b82f6;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; margin-right: 12px; flex-shrink: 0;
+    }
+  .badge.orange { background: #f59e0b; }
+  .card-title { font-weight: 600; font-size: 16px; color: #e2e8f0; }
+  .card-title-small {
+      font-weight: 600; margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+  .card-desc { font-size: 14px; color: #94a3b8; }
+
+  .btn {
+      width: 100%; padding: 12px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      color: #3b82f6;
+      font-size: 14px; cursor: pointer; margin-top: 12px;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+  .btn:hover { border-color: #3b82f6; }
+
+  .input-group { display: flex; gap: 10px; margin-top: 12px; }
+    input, textarea, select {
+      flex: 1; padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-size: 14px;
+    }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: #3b82f6; }
+    textarea { min-height: 100px; resize: vertical; }
+
+  .btn-save {
+      padding: 12px 24px;
+      background: #3b82f6;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  .btn-save:hover { background: #2563eb; }
+  .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .info-box {
+      background: #0f172a;
+      border-radius: 12px;
+      padding: 16px 20px;
+      text-align: left;
+      border: 1px solid #334155;
+    }
+  .info-title {
+      color: #60a5fa; font-weight: 600; margin-bottom: 10px;
+      display: flex; align-items: center; gap: 6px;
+    }
+  .info-box ul { list-style: none; color: #94a3b8; font-size: 14px; }
+  .info-box li { margin-bottom: 8px; padding-left: 20px; position: relative; }
+  .info-box li:before { content: "•"; color: #3b82f6; position: absolute; left: 0; }
+    strong { color: #e2e8f0; }
+
+  .generator { display: none; }
+  .generator.show { display: block; }
+  .form-group { margin-bottom: 16px; }
+  .form-label { display: block; margin-bottom: 8px; font-size: 14px; color: #94a3b8; }
+  .char-count { text-align: right; font-size: 12px; color: #64748b; margin-top: 4px; }
+    video { width: 100%; border-radius: 12px; margin-top: 20px; }
+  .loader { text-align: center; color: #60a5fa; padding: 20px; }
+
+  .upload-area {
+      border: 2px dashed #334155;
+      border-radius: 12px;
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+  .upload-area:hover {
+      border-color: #3b82f6;
+      background: #0f172a;
+    }
+  .upload-icon { font-size: 40px; margin-bottom: 10px; }
+  .upload-text { color: #94a3b8; font-size: 13px; margin-top: 4px; }
+
+  .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="header" id="header">
+    <div class="logo-wrap">
+      <div class="logo-icon"></div>
+      <div class="logo-text">SIKAL</div>
+    </div>
+    <div class="header-right">
+      <div class="status-btn">
+        <div class="status-dot"></div>
+        Terhubung
+      </div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="container landing" id="landingScreen">
+    <div class="logo-center">⚡</div>
+    <h1>Selamat Datang di SIKAL</h1>
+    <p class="subtitle">AI Video Generator dengan fal.ai</p>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="badge">1</div>
+        <div>
+          <div class="card-title">Daftar Akun fal.ai (Gratis)</div>
+          <div class="card-desc">Dapatkan kredit gratis untuk generate</div>
+        </div>
+      </div>
+      <button class="btn" onclick="window.open('https://fal.ai', '_blank')">
+        ✏️ Buka Halaman Daftar →
+      </button>
+    </div>
+
+    <div class="card" style="border-left-color: #f59e0b;">
+      <div class="card-header">
+        <div class="badge orange">2</div>
+        <div>
+          <div class="card-title">Paste API Key</div>
+          <div class="card-desc">Disimpan lokal di perangkat ini</div>
+        </div>
+      </div>
+      <div class="input-group">
+        <input type="password" id="apiKey" placeholder="79850499-xxxxxxxxxxxx">
+        <button class="btn-save" onclick="saveKey()">Simpan</button>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <div class="info-title">💡 Info:</div>
+      <ul>
+        <li>Pendaftaran & API key <strong>100% gratis</strong> — dapat kredit gratis</li>
+        <li>API key disimpan <strong>hanya di perangkat ini</strong></li>
+        <li>Setiap generate menggunakan kredit dari akun fal.ai kamu</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container generator" id="generatorScreen">
+    <div class="card">
+      <div class="card-title-small">🎬 Kling V3 Pro</div>
+      <div style="color:#94a3b8; font-size:14px;">Kualitas tertinggi — 5-10 detik</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title-small">📷 Upload Gambar</div>
+      <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+        <input type="file" id="fileInput" accept="image/*" style="display:none">
+        <div class="upload-icon">📸</div>
+        <div>Klik buat pilih foto</div>
+        <div class="upload-text">JPG, PNG, WEBP — Max 10MB</div>
+      </div>
+      <div id="previewImage" style="margin-top:12px; display:none;">
+        <img id="preview" style="width:100%; border-radius:12px;">
+        <button onclick="removeImage()" style="margin-top:8px; padding:6px 12px; background:#ef4444; border:none; border-radius:8px; color:#fff; cursor:pointer;">Hapus</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title-small">💬 Prompt</div>
+      <textarea id="prompt" placeholder="Deskripsikan gerakan yang diinginkan..." maxlength="2500"></textarea>
+      <div class="char-count"><span id="charCount">0</span>/2500</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title-small">⚙️ Settings</div>
+      <div class="form-group">
+        <label class="form-label">Aspect Ratio</label>
+        <select id="aspectRatio">
+          <option value="16:9">16:9</option>
+          <option value="9:16">9:16</option>
+          <option value="1:1">1:1</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Durasi</label>
+        <select id="duration">
+          <option value="5">5s</option>
+          <option value="10">10s</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn-save" id="generateBtn" style="width:100%">Generate Video</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const landingScreen = document.getElementById('landingScreen');
+    const generatorScreen = document.getElementById('generatorScreen');
+    const header = document.getElementById('header');
+    const apiKeyInput = document.getElementById('apiKey');
+    const promptInput = document.getElementById('prompt');
+    const charCount = document.getElementById('charCount');
+    const generateBtn = document.getElementById('generateBtn');
+    const resultDiv = document.getElementById('result');
+    const fileInput = document.getElementById('fileInput');
+
+    let uploadedImageUrl = null;
+
+    if (localStorage.getItem('falApiKey')) {
+      showGenerator();
+    }
+
+    function saveKey() {
+      const key = apiKeyInput.value.trim();
+      if (!key) return alert('Masukin API key dulu');
+      localStorage.setItem('falApiKey', key);
+      showGenerator();
+    }
+
+    function showGenerator() {
+      landingScreen.classList.add('hidden');
+      generatorScreen.classList.add('show');
+      header.classList.add('show');
+    }
+
+    function logout() {
+      localStorage.removeItem('falApiKey');
+      location.reload();
+    }
+
+    promptInput.addEventListener('input', () => {
+      charCount.textContent = promptInput.value.length;
+    });
+
+    fileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        document.getElementById('preview').src = e.target.result;
+        document.getElementById('previewImage').style.display = 'block';
+      }
+      reader.readAsDataURL(file);
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const res = await fetch('https://queue.fal.run/fal-ai/file-upload', {
+          method: 'POST',
+          headers: { 'Authorization': 'Key ' + localStorage.getItem('falApiKey') },
+          body: formData
+        });
+        const data = await res.json();
+        uploadedImageUrl = data.url;
+      } catch (err) {
+        alert('Gagal upload gambar: ' + err.message);
+      }
+    });
+
+    function removeImage() {
+      uploadedImageUrl = null;
+      document.getElementById('previewImage').style.display = 'none';
+      fileInput.value = '';
+    }
+
+    generateBtn.addEventListener('click', async () => {
+      const apiKey = localStorage.getItem('falApiKey');
+      const prompt = promptInput.value.trim();
+      if (!prompt) return alert('Masukin prompt dulu');
+
+      generateBtn.disabled = true;
+      resultDiv.innerHTML = '<div class="loader">Sedang generate... sabar ya</div>';
+
+      try {
+        const body = {
+          prompt,
+          apiKey,
+          aspect_ratio: document.getElementById('aspectRatio').value,
+          duration: parseInt(document.getElementById('duration').value)
+        };
+
+        if (uploadedImageUrl) {
+          body.image_url = uploadedImageUrl;
+        }
+
+        const res = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        pollStatus(data.request_id, apiKey);
+      } catch (err) {
+        resultDiv.innerHTML = `<p style="color:#ef4444">Error: ${err.message}</p>`;
+        generateBtn.disabled = false;
+      }
+    });
+
+    async function pollStatus(requestId, apiKey) {
+      const interval = setInterval(async () => {
+        const res = await fetch('/api/status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ request_id: requestId, apiKey })
+        });
+
+        const data = await res.json();
+
+        if (data.status === 'COMPLETED') {
+          clearInterval(interval);
+          resultDiv.innerHTML = `<video src="${data.video.url}" controls autoplay loop></video>`;
+          generateBtn.disabled = false;
+        } else if (data.status === 'FAILED') {
+          clearInterval(interval);
+          resultDiv.innerHTML = '<p style="color:#ef4444">Gagal generate</p>';
+          generateBtn.disabled = false;
+        }
+      }, 3000);
+    }
+  </script>
+</body>
+          </html>
